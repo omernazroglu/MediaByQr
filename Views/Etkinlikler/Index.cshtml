@@ -1,0 +1,276 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etkinlik Yönetimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+
+        .container-custom {
+            max-width: 1200px;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            border-radius: 25px;
+            padding: 4rem 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+            .header-section h1 {
+                font-weight: 700;
+                color: #212529;
+            }
+
+                .header-section h1 span {
+                    background: -webkit-linear-gradient(45deg, #4f33ff, #8a2be2);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+            .header-section p {
+                color: #6c757d;
+                max-width: 600px;
+                margin: 0.5rem auto 0;
+            }
+
+        .action-buttons {
+            gap: 1rem;
+        }
+
+        .btn-profile, .btn-logout, .btn-new-event {
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-profile {
+            background-color: #ffffff;
+            color: #4f33ff;
+            border: 2px solid #4f33ff;
+        }
+
+            .btn-profile:hover {
+                background-color: #4f33ff;
+                color: #ffffff;
+                transform: translateY(-3px);
+                box-shadow: 0 4px 12px rgba(79, 51, 255, 0.3);
+            }
+
+        .btn-logout {
+            background-color: #ffffff;
+            color: #dc3545;
+            border: 2px solid #dc3545;
+        }
+
+            .btn-logout:hover {
+                background-color: #dc3545;
+                color: #ffffff;
+                transform: translateY(-3px);
+                box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            }
+
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+            .card:hover {
+                transform: translateY(-8px) scale(1.02);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            }
+
+        .card-title {
+            font-weight: 700;
+            color: #343a40;
+        }
+
+        .card-subtitle {
+            color: #868e96;
+        }
+
+        .card-body .btn {
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: auto;
+        }
+
+        .modal-content {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: #343a40;
+        }
+
+        .modal-body img {
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .empty-state {
+            background-color: #f8f9fa;
+            border: 2px dashed #ced4da;
+            border-radius: 15px;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .btn-new-event {
+            background-color: #4f33ff;
+            color: #ffffff;
+            border: none;
+        }
+
+            .btn-new-event:hover {
+                background-color: #3d26cc;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 15px rgba(79, 51, 255, 0.4);
+            }
+    </style>
+</head>
+<body>
+
+    @model IEnumerable<EtkinlikViewModel>
+
+    <div class="container container-custom">
+        <div class="d-flex justify-content-end mb-4 action-buttons">
+            <a href="@Url.Action("Profile","Account", new { kullaniciAdi = ViewBag.KullaniciAdi })"
+               class="btn btn-profile d-flex align-items-center">
+                <i class="bi bi-person-circle me-2"></i>
+                Profilim
+            </a>
+
+            <a href="/Home/Index" class="btn btn-logout d-flex align-items-center">
+                <i class="bi bi-box-arrow-right me-2"></i>
+                Çıkış Yap
+            </a>
+        </div>
+
+        <div class="header-section">
+            <h1>Hoşgeldiniz, <span>@ViewBag.KullaniciAdi</span> 🎉</h1>
+            <p>Etkinliklerinizi yönetin, fotoğraflarını ve QR kodlarını kolayca görüntüleyin.</p>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var e in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column p-4">
+                                <h5 class="card-title mb-1">@e.Ad</h5>
+                                <p class="card-subtitle text-muted mb-3">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    @e.OlusturulmaTarihi.ToString("dd MMMM yyyy")
+                                </p>
+                                <hr class="my-2">
+                                <div class="d-grid gap-2 mt-auto">
+                                    <a href="@Url.Action("Details", "Etkinlikler", new { id = e.Id })"
+                                       class="btn btn-primary btn-sm">
+                                        <i class="bi bi-image me-1"></i> Fotoğrafları Görüntüle
+                                    </a>
+                                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#qrModal-@e.Id">
+                                        <i class="bi bi-qr-code me-1"></i> QR Kodunu Görüntüle
+                                    </button>
+                                    <a href="@Url.Action("Edit", "Etkinlikler", new { id = e.Id ,username=ViewBag.KullaniciAdi})"
+                                       class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil me-1"></i> Güncelle
+                                    </a>
+                                    <a href="#"
+                                       class="btn btn-danger btn-sm" onclick="handleDelete(@e.Id); return false;">
+                                        <i class="bi bi-trash me-1"></i> Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="qrModal-@e.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content text-center p-4 rounded-4">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title w-100">@e.Ad - QR Kod</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body pt-3">
+                                    @if (!string.IsNullOrEmpty(e.QrUrl))
+                                    {
+                                        <img src="data:image/png;base64,@e.QrUrl" class="img-fluid" style="width:250px; height:250px;" alt="QR Kod" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/placeholder.png" class="img-fluid" style="width:250px; height:250px;" alt="QR Kod yok" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state mb-5">
+                <i class="bi bi-info-circle-fill h1 mb-3"></i>
+                <p class="lead">Henüz hiç etkinlik oluşturulmamış.</p>
+                <p>Başlamak için aşağıdaki butona tıklayarak yeni bir etkinlik ekle.</p>
+            </div>
+        }
+
+        <div class="text-center mt-5">
+            <a href="@Url.Action("Create","Etkinlikler",new{kullaniciAdi=ViewBag.KullaniciAdi})" class="btn btn-new-event btn-lg px-5">
+                <i class="bi bi-plus-circle me-2"></i>
+                Yeni Etkinlik Ekle
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function handleDelete(id) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '@Url.Action("Delete", "Etkinlikler")/' + id;
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

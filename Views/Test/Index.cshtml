@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null; // Sadece QR için tam ekran görünüm
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Etkinlik QR Kodu</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .qr-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .qr-container img {
+            width: 250px;
+            height: 250px;
+        }
+
+        .qr-container p {
+            margin-top: 15px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h2>Etkinlik QR Kodunuz</h2>
+        
+            <img src="data:image/png;base64,@ViewBag.qr" alt="QR Kod" />
+        
+        <p>Lütfen bu QR kodu etkinlik girişinde kullanın.</p>
+    </div>
+</body>
+</html>

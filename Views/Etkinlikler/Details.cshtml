@@ -1,0 +1,538 @@
+﻿@model Etkinlik
+@{
+	Layout = null;
+	ViewData["Title"] = Model.EtkinlikAdi + " Medya Albümü";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>@ViewData["Title"]</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		/* Genel Sayfa Stili */
+		body {
+			background-color: #f0f2f5;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		}
+
+		.container {
+			background-color: #fff;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+			padding: 30px;
+		}
+
+		/* Başlık */
+		h2 {
+			color: #1a237e;
+			font-weight: 600;
+			border-bottom: 2px solid #e0e0e0;
+			padding-bottom: 10px;
+			margin-bottom: 25px;
+		}
+
+		/* Düğmeler ve Butonlar */
+		.btn {
+			border-radius: 50px;
+			font-weight: 500;
+			transition: all 0.3s ease;
+		}
+
+		.btn-primary {
+			background-color: #0d6efd;
+			border-color: #0d6efd;
+		}
+
+			.btn-primary:hover {
+				background-color: #0a58ca;
+				border-color: #0a58ca;
+			}
+
+		.btn-outline-primary, .btn-outline-secondary {
+			border-radius: 50px;
+		}
+
+		.btn-success {
+			background-color: #28a745;
+			border-color: #28a745;
+		}
+
+			.btn-success:hover {
+				background-color: #218838;
+				border-color: #1e7e34;
+			}
+
+		/* Kart Görünümü (Grid) */
+		.drive-card {
+			border: none;
+			border-radius: 10px;
+			overflow: hidden;
+			position: relative;
+			cursor: pointer;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		}
+
+			.drive-card:hover {
+				transform: translateY(-8px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+			}
+
+		.drive-actions {
+			opacity: 0;
+			background-color: rgba(0, 0, 0, 0.65);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			transition: opacity 0.3s ease;
+		}
+
+		.drive-card:hover .drive-actions {
+			opacity: 1;
+		}
+
+		.drive-checkbox {
+			top: 10px;
+			left: 10px;
+		}
+
+		/* Liste Görünümü (Table) */
+		.table {
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+		}
+
+			.table thead th {
+				background-color: #e9ecef;
+				color: #495057;
+				border-bottom: 2px solid #dee2e6;
+				font-weight: 600;
+			}
+
+			.table tbody tr {
+				transition: background-color 0.2s ease;
+			}
+
+				.table tbody tr:hover {
+					background-color: #f8f9fa;
+				}
+
+		.img-thumbnail {
+			border-radius: 8px;
+			border: 1px solid #ddd;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+		}
+
+		/* Modal ve Carousel */
+		#mediaModal .modal-content {
+			background: rgba(0, 0, 0, 0.85);
+			border: none;
+		}
+
+		#mediaModal .modal-body {
+			padding: 0;
+		}
+
+		#modalCarousel img, #modalCarousel video {
+			max-height: 95vh;
+			object-fit: contain;
+			border-radius: 8px;
+		}
+
+		.carousel-control-prev-icon,
+		.carousel-control-next-icon {
+			background-color: #fff;
+			border-radius: 50%;
+			padding: 10px;
+		}
+
+		.carousel-control-prev,
+		.carousel-control-next {
+			opacity: 0.8;
+		}
+
+		/* Responsive Düzenlemeler */
+		@@media (max-width: 576px) {
+			.container {
+				padding: 15px;
+				border-radius: 0;
+			}
+
+			h2 {
+				font-size: 1.5rem;
+				text-align: center;
+			}
+
+			.btn {
+				width: 100%;
+				margin-bottom: 10px;
+			}
+
+			.d-flex.justify-content-end.mb-3.gap-2 {
+				flex-direction: column;
+				align-items: stretch;
+			}
+		}
+		.drive-card {
+			height: 150px;
+			overflow: hidden;
+			transition: transform .2s, box-shadow .2s;
+		}
+
+			.drive-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 8px 16px rgba(0,0,0,.2) !important;
+			}
+
+		.drive-thumb {
+			cursor: pointer;
+		}
+
+		.drive-actions {
+			position: absolute;
+			inset: 0;
+			background-color: rgba(0,0,0,.5);
+			opacity: 0;
+			transition: opacity .3s ease;
+		}
+
+		.drive-card:hover .drive-actions {
+			opacity: 1;
+		}
+
+		.drive-checkbox {
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			z-index: 10;
+		}
+
+		#mediaModal .modal-content {
+			background: #000;
+			color: #fff;
+		}
+
+		#mediaModal .modal-body {
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 50vh;
+		}
+
+		#mediaModal img, #mediaModal video {
+			max-width: 100%;
+			max-height: 90vh;
+			width: auto;
+			height: auto;
+			display: block;
+			margin: auto;
+			object-fit: contain;
+		}
+	</style>
+</head>
+<body>
+	<div class="container py-3">
+
+		<div class="d-flex justify-content-end mb-3 gap-2">
+			<a href="@Url.Action("Index","Etkinlikler", new { kullaniciAdi = ViewBag.KullaniciAdi })" class="btn btn-outline-primary d-flex align-items-center">
+				<i class="bi bi-arrow-left-circle-fill me-2"></i> Etkinliklerime Geri Dön
+			</a>
+			<a href="/Home/Index" class="btn btn-outline-danger d-flex align-items-center">
+				<i class="bi bi-box-arrow-right me-2"></i> Çıkış Yap
+			</a>
+		</div>
+
+		<h2 class="mb-4">@Model.EtkinlikAdi - Medya Albümü</h2>
+
+		<div class="d-flex justify-content-end mb-3">
+			<button id="downloadSelectedBtn" class="btn btn-success me-2" disabled>
+				<i class="bi bi-cloud-arrow-down-fill"></i> Seçilenleri İndir
+			</button>
+			<button id="gridViewBtn" class="btn btn-primary me-2">
+				<i class="bi bi-grid-3x3-gap-fill"></i> Tablo
+			</button>
+			<button id="listViewBtn" class="btn btn-outline-secondary">
+				<i class="bi bi-list-ul"></i> Liste
+			</button>
+		</div>
+
+		<div id="gridView" class="d-none">
+			<div class="mb-3">
+				<div class="form-check d-flex align-items-center">
+					<input class="form-check-input" type="checkbox" id="selectAllGridCheckbox">
+					<label class="form-check-label ms-2" for="selectAllGridCheckbox">Tümünü Seç</label>
+				</div>
+			</div>
+			<div class="row g-3">
+				@for (int i = 0; i < Model.Fotograflar.Count; i++)
+				{
+					var media = Model.Fotograflar[i];
+					<div class="col-6 col-sm-4 col-md-3">
+						<div class="drive-card position-relative shadow-sm rounded">
+							<input type="checkbox" class="drive-checkbox form-check-input file-checkbox-item" data-file-url="@media.DosyaYolu" />
+							@if (media.DosyaTipi == "image")
+							{
+								<img src="@media.DosyaYolu"
+									 alt="@media.DosyaAdı"
+									 loading="lazy"
+									 class="w-100 h-100 drive-thumb media-thumb"
+									 style="object-fit:cover;"
+									 data-index="@i" />
+							}
+							else if (media.DosyaTipi == "video")
+							{
+								<video class="w-100 h-100 drive-thumb media-thumb"
+									   style="object-fit:cover;"
+									   data-index="@i"
+									   muted
+									   playsinline>
+									<source src="@media.DosyaYolu" type="video/mp4" />
+									Tarayıcınız video etiketini desteklemiyor.
+								</video>
+							}
+							<div class="drive-actions d-flex justify-content-center align-items-center">
+								<a href="@media.DosyaYolu" download class="btn btn-sm btn-light" title="İndir">
+									<i class="bi bi-download"></i> İndir
+								</a>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+
+		<table id="listView" class="table table-hover">
+			<thead>
+				<tr>
+					<th style="width:180px">
+						<div class="form-check">
+							<input type="checkbox" id="selectAllListCheckbox" class="form-check-input" />
+							<label for="selectAllListCheckbox" class="form-check-label ms-2">Tümünü Seç</label>
+						</div>
+					</th>
+					<th style="width:120px">Önizleme</th>
+					<th>Dosya Adı</th>
+					<th style="width:140px">İşlemler</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (int i = 0; i < Model.Fotograflar.Count; i++)
+				{
+					var media = Model.Fotograflar[i];
+					<tr>
+						<td><input type="checkbox" class="file-checkbox-item form-check-input" data-file-url="@media.DosyaYolu" /></td>
+						<td>
+							@if (media.DosyaTipi == "image")
+							{
+								<img src="@media.DosyaYolu"
+									 alt="@media.DosyaAdı"
+									 loading="lazy"
+									 class="img-thumbnail media-thumb"
+									 style="width:90px;height:68px;object-fit:cover;cursor:pointer;"
+									 data-index="@i" />
+							}
+							else if (media.DosyaTipi == "video")
+							{
+								<video class="img-thumbnail media-thumb"
+									   style="width:90px;height:68px;object-fit:cover;cursor:pointer;"
+									   data-index="@i"
+									   muted
+									   playsinline>
+									<source src="@media.DosyaYolu" type="video/mp4" />
+									Tarayıcınız video etiketini desteklemiyor.
+								</video>
+							}
+						</td>
+						<td>
+							@if (media.DosyaTipi == "image")
+							{
+								<span>Fotoğraf @(i + 1)</span>
+							}
+							else if (media.DosyaTipi == "video")
+							{
+								<span>Video @(i + 1)</span>
+							}
+						</td>
+						<td>
+							<a href="@media.DosyaYolu" download class="btn btn-sm btn-light" title="İndir">
+								<i class="bi bi-download"></i> İndir
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+
+		<div class="modal fade" id="mediaModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-xl modal-fullscreen-sm-down modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body p-0">
+						<div id="modalCarousel" class="carousel slide" data-bs-interval="false">
+							<div class="carousel-inner">
+								@for (int i = 0; i < Model.Fotograflar.Count; i++)
+								{
+									var media = Model.Fotograflar[i];
+									<div class="carousel-item @(i == 0 ? "active" : "") text-center">
+										@if (media.DosyaTipi == "image")
+										{
+											<img src="@media.DosyaYolu" alt="@media.DosyaAdı" draggable="false" />
+										}
+										else if (media.DosyaTipi == "video")
+										{
+											<video controls>
+												<source src="@media.DosyaYolu" type="video/mp4">
+												Tarayıcınız video etiketini desteklemiyor.
+											</video>
+										}
+									</div>
+								}
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Önceki</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#modalCarousel" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Sonraki</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const gridViewBtn = document.getElementById('gridViewBtn');
+			const listViewBtn = document.getElementById('listViewBtn');
+			const gridView = document.getElementById('gridView');
+			const listView = document.getElementById('listView');
+			const downloadSelectedBtn = document.getElementById('downloadSelectedBtn');
+			const fileCheckboxes = document.querySelectorAll('.file-checkbox-item');
+			const selectAllGridCheckbox = document.getElementById('selectAllGridCheckbox');
+			const selectAllListCheckbox = document.getElementById('selectAllListCheckbox');
+
+			// Başlangıç: Liste açık
+			gridView.classList.add('d-none');
+			listView.classList.remove('d-none');
+			gridViewBtn.classList.remove('btn-primary'); gridViewBtn.classList.add('btn-outline-primary');
+			listViewBtn.classList.remove('btn-outline-secondary'); listViewBtn.classList.add('btn-primary');
+
+			gridViewBtn.addEventListener('click', () => {
+				gridView.classList.remove('d-none');
+				listView.classList.add('d-none');
+				gridViewBtn.classList.remove('btn-outline-primary'); gridViewBtn.classList.add('btn-primary');
+				listViewBtn.classList.remove('btn-primary'); listViewBtn.classList.add('btn-outline-secondary');
+			});
+			listViewBtn.addEventListener('click', () => {
+				listView.classList.remove('d-none');
+				gridView.classList.add('d-none');
+				listViewBtn.classList.remove('btn-outline-secondary'); listViewBtn.classList.add('btn-primary');
+				gridViewBtn.classList.remove('btn-primary'); gridViewBtn.classList.add('btn-outline-primary');
+			});
+
+			// Tümünü Seç
+			if (selectAllGridCheckbox) {
+				selectAllGridCheckbox.addEventListener('change', (e) => {
+					fileCheckboxes.forEach(cb => cb.checked = e.target.checked);
+					updateDownloadButtonState();
+					if (selectAllListCheckbox) selectAllListCheckbox.checked = e.target.checked;
+				});
+			}
+			if (selectAllListCheckbox) {
+				selectAllListCheckbox.addEventListener('change', (e) => {
+					fileCheckboxes.forEach(cb => cb.checked = e.target.checked);
+					updateDownloadButtonState();
+					if (selectAllGridCheckbox) selectAllGridCheckbox.checked = e.target.checked;
+				});
+			}
+			fileCheckboxes.forEach(cb => cb.addEventListener('change', updateDownloadButtonState));
+
+			function updateDownloadButtonState() {
+				const checkedCount = document.querySelectorAll('.file-checkbox-item:checked').length;
+				downloadSelectedBtn.disabled = checkedCount === 0;
+			}
+
+			downloadSelectedBtn.addEventListener('click', () => {
+				const selected = document.querySelectorAll('.file-checkbox-item:checked');
+				if (selected.length === 0) { alert('Lütfen indirmek için en az bir dosya seçin.'); return; }
+				selected.forEach(checkbox => {
+					const fileUrl = checkbox.getAttribute('data-file-url');
+					const link = document.createElement('a');
+					link.href = fileUrl;
+					link.download = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				});
+				alert('İndirme işlemi başladı. Tarayıcınızda birden fazla indirme uyarısı görebilirsiniz.');
+			});
+
+			// Modal + Carousel
+			const mediaModalEl = document.getElementById('mediaModal');
+			const mediaModal = new bootstrap.Modal(mediaModalEl);
+			const carouselEl = document.getElementById('modalCarousel');
+			const carousel = new bootstrap.Carousel(carouselEl, { interval: false, ride: false, wrap: true });
+
+			// Önizleme tıklanınca tıklanan index'ten aç
+			document.querySelectorAll('.media-thumb').forEach(el => {
+				el.addEventListener('click', () => {
+					const idx = Number(el.getAttribute('data-index')) || 0;
+					mediaModal.show();
+					mediaModalEl.addEventListener('shown.bs.modal', function setOnce() {
+						carousel.to(idx);
+						mediaModalEl.removeEventListener('shown.bs.modal', setOnce);
+					});
+				});
+			});
+
+			// Slayt değişince aktif olmayan videoları durdur
+			function pauseAllNonActiveVideos() {
+				carouselEl.querySelectorAll('video').forEach(v => {
+					const item = v.closest('.carousel-item');
+					if (!item.classList.contains('active')) v.pause();
+				});
+			}
+			carouselEl.addEventListener('slide.bs.carousel', pauseAllNonActiveVideos);
+			carouselEl.addEventListener('slid.bs.carousel', pauseAllNonActiveVideos);
+
+			// Modal açıkken klavye yön tuşları
+			function onModalKeydown(e) {
+				if (e.key === 'ArrowRight') carousel.next();
+				if (e.key === 'ArrowLeft') carousel.prev();
+			}
+			mediaModalEl.addEventListener('shown.bs.modal', () => {
+				document.addEventListener('keydown', onModalKeydown);
+			});
+			mediaModalEl.addEventListener('hidden.bs.modal', () => {
+				document.removeEventListener('keydown', onModalKeydown);
+				// Modal kapanınca tüm videoları durdur
+				carouselEl.querySelectorAll('video').forEach(v => v.pause());
+			});
+
+			// Mobil: swipe ile geçiş
+			let touchStartX = 0;
+			carouselEl.addEventListener('touchstart', (e) => {
+				touchStartX = e.changedTouches[0].screenX;
+			}, { passive: true });
+			carouselEl.addEventListener('touchend', (e) => {
+				const dx = e.changedTouches[0].screenX - touchStartX;
+				if (Math.abs(dx) > 40) {
+					if (dx < 0) carousel.next(); else carousel.prev();
+				}
+			}, { passive: true });
+
+			updateDownloadButtonState();
+		});
+	</script>
+</body>
+</html>
