@@ -246,7 +246,7 @@
 </head>
 <body>
 
-    <
+    
     <div class="action-buttons position-absolute top-0 end-0 m-3 d-flex">
         <a href="@Url.Action("Index","Etkinlikler", new { kullaniciAdi = Model.KullaniciAdi })"
            class="btn btn-profile d-flex align-items-center me-2">
@@ -341,14 +341,19 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Kullanıcı Adı</label>
-                            <input type="text" class="form-control" id="KullaniciAdi" name="KullaniciAdi" required @Model.KullaniciAdi />
+                            <input type="text" class="form-control" id="KullaniciAdi" name="KullaniciAdi" required placeholder="@Model.KullaniciAdi" />
                         </div>
                        
                     </div>
                     <div class="modal-footer border-0">
                         <button type="submit" class="btn btn-success w-100">Bilgileri Güncelle</button>
                     </div>
+                    
+                    <div class="modal-footer border-0">
+                        <button type="submit" action="@Url.Action("Profile","Account", new { kullaniciAdi = Model.KullaniciAdi })" class="btn btn-danger">Vazgeç</button>
+                    </div>
                 </form>
+                
             </div>
         </div>
     </div>

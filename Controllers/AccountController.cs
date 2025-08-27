@@ -118,7 +118,7 @@ namespace MediaByQr.Controllers
             var user=await _context.Kullanicilar.FirstOrDefaultAsync(k=>k.KullaniciId==kullaniciId);
            if(user == null) return NotFound();
 
-            if (_context.Kullanicilar.Any(o => o.KullaniciAdi == KullaniciAdi))
+            if (_context.Kullanicilar.Any(o => o.KullaniciAdi == KullaniciAdi && o.KullaniciAdi != KullaniciAdi))
             {
                 TempData["InformationFalse"] = "Birden fazla ayni kullanici";
                 return RedirectToAction("Profile", new { kullaniciAdi = user.KullaniciAdi });
@@ -158,8 +158,8 @@ namespace MediaByQr.Controllers
             {
 
                 string alıcıEmail = Email;
-                string senderEmail = "emine1naziroglu@gmail.com"; // kendi Gmail adresin
-                string appPassword = "bdvl hdwf wehe fmbi"; // uygulama şifresi
+                string senderEmail = ""; // kendi Gmail adresin
+                string appPassword = ""; // uygulama şifresi
 
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(senderEmail);
