@@ -1,14 +1,16 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Inter&weight=700&size=36&pause=1000&color=7C3AED&center=true&vCenter=true&width=650&lines=📸+MediaByQR;QR+Kod+ile+Medya+Paylaşım+Platformu" alt="MediaByQR" />
+# 📸 MediaByQR
+
+### QR Kod ile Medya Paylaşım Platformu
 
 <br/>
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![EF Core](https://img.shields.io/badge/Entity_Framework_Core-SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-12.0-239120?style=for-the-badge&logo=csharp&logoColor=white)
-![QR Code](https://img.shields.io/badge/QRCoder-Entegre-7C3AED?style=for-the-badge&logo=qrcode&logoColor=white)
-![BCrypt](https://img.shields.io/badge/BCrypt-Şifre_Güvenliği-DC2626?style=for-the-badge&logo=letsencrypt&logoColor=white)
+![QRCoder](https://img.shields.io/badge/QRCoder-Entegre-7C3AED?style=for-the-badge&logoColor=white)
+![BCrypt](https://img.shields.io/badge/BCrypt-Sifre_Guvenligi-DC2626?style=for-the-badge&logo=letsencrypt&logoColor=white)
 
 <br/>
 
